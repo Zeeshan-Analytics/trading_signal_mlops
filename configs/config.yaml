@@ -1,0 +1,182 @@
+project:
+  name: "trading-signal-generator"
+  version: "0.1.0"
+  description: "MLOps project for generating intraday trading signals"
+
+data:
+  source: "yfinance"
+  tickers:
+    - "AAPL"
+    - "MSFT"
+    - "GOOGL"
+    - "AMZN"
+    - "TSLA"
+    - "NVDA"
+    - "META"
+    - "JPM"
+    - "BAC"
+    - "V"
+  interval: "1h"  # hourly data for intraday trading
+  period: "730d"  # 2 years of historical data
+  
+  # Train/Val/Test splits
+  train_split: 0.7
+  val_split: 0.15
+  test_split: 0.15
+  
+  # Data quality
+  min_data_points: 1000  # minimum data points required per ticker
+  handle_missing: "forward_fill"  # or "interpolate" or "drop"
+
+features:
+  # Technical indicators to calculate
+  technical_indicators:
+    # Moving Averages
+    - "SMA_10"
+    - "SMA_20"
+    - "SMA_50"
+    - "EMA_12"
+    - "EMA_26"
+    
+    # Momentum Indicators
+    - "RSI_14"
+    - "MACD"
+    - "MACD_signal"
+    - "MACD_hist"
+    - "Stochastic_K"
+    - "Stochastic_D"
+    
+    # Volatility Indicators
+    - "BB_upper"
+    - "BB_middle"
+    - "BB_lower"
+    - "ATR_14"
+    
+    # Volume Indicators
+    - "volume_sma_20"
+    - "OBV"
+    
+  # Time-based features
+  time_features:
+    - "hour"
+    - "day_of_week"
+    - "month"
+    
+  # Lookback window for sequence data
+  lookback_window: 24  # 24 hours (1 day) of historical data
+  
+  # Feature scaling
+  scaling_method: "standard"  # or "minmax" or "robust"
+
+model:
+  type: "neural_network"
+  framework: "tensorflow"
+  
+  architecture:
+    input_size: null  # will be set dynamically based on features
+    hidden_layers: [128, 64, 32]
+    output_size: 5  # 5 classes: strong_buy, buy, hold, sell, strong_sell
+    dropout_rate: 0.3
+    activation: "relu"
+    output_activation: "softmax"
+  
+  training:
+    epochs: 100
+    batch_size: 32
+    learning_rate: 0.001
+    optimizer: "adam"
+    loss: "categorical_crossentropy"
+    metrics: ["accuracy", "precision", "recall"]
+    
+    # Early stopping
+    early_stopping:
+      enabled: true
+      patience: 10
+      monitor: "val_loss"
+      restore_best_weights: true
+    
+    # Learning rate scheduling
+    reduce_lr:
+      enabled: true
+      factor: 0.5
+      patience: 5
+      min_lr: 0.00001
+  
+  # Class weights for imbalanced data
+  class_weights:
+    strong_sell: 1.0
+    sell: 1.0
+    hold: 0.5  # typically more hold signals
+    buy: 1.0
+    strong_buy: 1.0
+
+signals:
+  # Signal mapping
+  classes:
+    0: "strong_sell"
+    1: "sell"
+    2: "hold"
+    3: "buy"
+    4: "strong_buy"
+  
+  # Thresholds for generating signals (based on price change)
+  thresholds:
+    strong_buy: 0.02    # > 2% expected increase
+    buy: 0.01           # > 1% expected increase
+    hold: [-0.01, 0.01] # -1% to 1%
+    sell: -0.01         # < -1% expected decrease
+    strong_sell: -0.02  # < -2% expected decrease
+
+wandb:
+  project: "trading-signal-generator"
+  entity: null  # set in .env or here
+  log_frequency: 10  # log every 10 batches
+  save_code: true
+  
+  # Hyperparameter sweep configuration
+  sweep:
+    method: "bayes"
+    metric:
+      name: "val_accuracy"
+      goal: "maximize"
+    parameters:
+      learning_rate:
+        distribution: "log_uniform"
+        min: 0.0001
+        max: 0.01
+      batch_size:
+        values: [16, 32, 64]
+      dropout_rate:
+        distribution: "uniform"
+        min: 0.2
+        max: 0.5
+
+api:
+  title: "Trading Signal API"
+  description: "API for generating trading signals"
+  version: "1.0.0"
+  host: "0.0.0.0"
+  port: 8000
+  reload: false  # set to true for development
+
+streamlit:
+  title: "Trading Signal Dashboard"
+  host: "0.0.0.0"
+  port: 8501
+  theme: "dark"
+
+deployment:
+  api:
+    platform: "render"
+    auto_deploy: true
+    retraining_schedule: "weekly"  # cron: 0 0 * * 0 (every Sunday)
+  
+  dashboard:
+    platform: "streamlit_cloud"
+    auto_deploy: true
+
+monitoring:
+  log_predictions: true
+  log_performance: true
+  alert_on_drift: true
+  drift_threshold: 0.1

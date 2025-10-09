@@ -1,0 +1,12 @@
+# DVC Pipeline Configuration
+# Stages will be defined as we build the pipeline
+
+# Example structure (to be implemented):
+# stages:
+#   fetch_data:
+#     cmd: python src/data/fetch_data.py
+#     deps:
+#       - src/data/fetch_data.py
+#       - configs/config.yaml
+#     outs:
+#       - data/raw/
