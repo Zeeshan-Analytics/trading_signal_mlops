@@ -1,0 +1,118 @@
+_wandb:
+    value:
+        cli_version: 0.22.2
+        e:
+            49ferb3jwzo1bhyclb37t79o3gnq01n2:
+                codePath: src\models\train.py
+                codePathLocal: src\models\train.py
+                cpu_count: 2
+                cpu_count_logical: 4
+                disk:
+                    /:
+                        total: "500104687616"
+                        used: "80441135104"
+                email: zeeshan.dsml@gmail.com
+                executable: E:\BootCamp Assignments\MLOps\trading_signal_mlops\mlops\Scripts\python.exe
+                git:
+                    commit: 051926ec69d2cd86b19c76857e946675173374fc
+                    remote: https://github.com/Zeeshan-Analytics/trading_signal_mlops.git
+                host: DESKTOP-B0COTDN
+                memory:
+                    total: "8319664128"
+                os: Windows-10-10.0.19045-SP0
+                program: E:\BootCamp Assignments\MLOps\trading_signal_mlops\src\models\train.py
+                python: CPython 3.12.1
+                root: E:\BootCamp Assignments\MLOps\trading_signal_mlops
+                startedAt: "2025-10-10T12:01:07.825556Z"
+                writerId: 49ferb3jwzo1bhyclb37t79o3gnq01n2
+        m: []
+        python_version: 3.12.1
+        t:
+            "1":
+                - 2
+                - 3
+                - 5
+                - 53
+                - 105
+            "2":
+                - 2
+                - 3
+                - 5
+                - 53
+                - 105
+            "3":
+                - 2
+                - 3
+                - 8
+                - 13
+                - 16
+            "4": 3.12.1
+            "5": 0.22.2
+            "8":
+                - 3
+            "10":
+                - 17
+            "12": 0.22.2
+            "13": windows-amd64
+architecture:
+    value:
+        activation: relu
+        dropout_rate: 0.3
+        hidden_layers:
+            - 128
+            - 64
+            - 32
+        input_size: null
+        output_activation: softmax
+        output_size: 5
+data:
+    value:
+        features:
+            - SMA_10
+            - SMA_20
+            - SMA_50
+            - EMA_12
+            - EMA_26
+            - RSI_14
+            - MACD
+            - MACD_signal
+            - MACD_hist
+            - BB_upper
+            - BB_middle
+            - BB_lower
+            - volume_sma_20
+            - price_change
+        interval: 1h
+        num_features: 14
+        tickers:
+            - AAPL
+            - MSFT
+            - GOOGL
+            - AMZN
+            - TSLA
+            - NVDA
+            - META
+            - JPM
+            - BAC
+            - V
+training:
+    value:
+        batch_size: 32
+        early_stopping:
+            enabled: true
+            monitor: val_loss
+            patience: 10
+            restore_best_weights: true
+        epochs: 100
+        learning_rate: 0.001
+        loss: categorical_crossentropy
+        metrics:
+            - accuracy
+            - precision
+            - recall
+        optimizer: adam
+        reduce_lr:
+            enabled: true
+            factor: 0.5
+            min_lr: 1e-05
+            patience: 5

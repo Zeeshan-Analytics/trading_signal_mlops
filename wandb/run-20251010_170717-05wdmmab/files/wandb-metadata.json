@@ -1,0 +1,28 @@
+{
+  "os": "Windows-10-10.0.19045-SP0",
+  "python": "CPython 3.12.1",
+  "startedAt": "2025-10-10T12:07:17.374859Z",
+  "program": "E:\\BootCamp Assignments\\MLOps\\trading_signal_mlops\\src\\models\\train.py",
+  "codePath": "src\\models\\train.py",
+  "codePathLocal": "src\\models\\train.py",
+  "git": {
+    "remote": "https://github.com/Zeeshan-Analytics/trading_signal_mlops.git",
+    "commit": "051926ec69d2cd86b19c76857e946675173374fc"
+  },
+  "email": "zeeshan.dsml@gmail.com",
+  "root": "E:\\BootCamp Assignments\\MLOps\\trading_signal_mlops",
+  "host": "DESKTOP-B0COTDN",
+  "executable": "E:\\BootCamp Assignments\\MLOps\\trading_signal_mlops\\mlops\\Scripts\\python.exe",
+  "cpu_count": 2,
+  "cpu_count_logical": 4,
+  "disk": {
+    "/": {
+      "total": "500104687616",
+      "used": "80441188352"
+    }
+  },
+  "memory": {
+    "total": "8319664128"
+  },
+  "writerId": "z9odt0wg37pl6i5os0mfh24gwks3gvqo"
+}
